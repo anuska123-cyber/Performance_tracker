@@ -1,4 +1,4 @@
-# Essential build tools (added to fix build errors on Render)
+# Essential build tools (must be installed first)
 pip>=23.1
 setuptools>=67.0
 wheel>=0.40
@@ -18,17 +18,21 @@ Jinja2==3.1.6
 joblib==1.5.1
 kiwisolver==1.4.8
 MarkupSafe==3.0.2
-matplotlib==3.10.3
-numpy==1.24.3
+
+# The following are heavy packages → force binary install
+matplotlib==3.10.3 --only-binary :all:
+numpy==1.24.3 --only-binary :all:
+pandas==2.3.1 --only-binary :all:
+pillow==11.3.0 --only-binary :all:
+scikit-learn==1.7.0 --only-binary :all:
+scipy==1.15.3 --only-binary :all:
+seaborn==0.13.2 --only-binary :all:
+
+# Remaining packages
 packaging==25.0
-pandas==2.3.1
-pillow==11.3.0
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
 pytz==2025.2
-scikit-learn==1.7.0
-scipy==1.15.3
-seaborn==0.13.2
 six==1.17.0
 threadpoolctl==3.6.0
 tzdata==2025.2
