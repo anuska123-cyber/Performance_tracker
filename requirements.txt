@@ -1,3 +1,10 @@
+# Essential build tools (added to fix build errors on Render)
+pip>=23.1
+setuptools>=67.0
+wheel>=0.40
+build>=0.10
+
+# Project dependencies
 blinker==1.9.0
 click==8.2.1
 colorama==0.4.6
