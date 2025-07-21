@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Prediction Results</h1>
+        </header>
+
+        <div class="results-container">
+            <div class="model-result">
+                <h3>Random Forest Model</h3>
+                <div class="score-meter">
+                    <div class="meter-container">
+                        <div class="meter-bar">
+                            <div class="meter-fill rf-fill" style="width: {{ (results.random_forest.probability * 100)|round(1) }}%"></div>
+                        </div>
+                        <div class="meter-value">{{ (results.random_forest.probability * 100)|round(1) }}%</div>
+                    </div>
+                    <p class="prediction-text rf-prediction">
+                        Prediction: <strong>{{ "PASS" if results.random_forest.prediction == 1 else "FAIL" }}</strong>
+                    </p>
+                </div>
+            </div>
+
+            <div class="model-result">
+                <h3>Logistic Regression Model</h3>
+                <div class="score-meter">
+                    <div class="meter-container">
+                        <div class="meter-bar">
+                            <div class="meter-fill lr-fill" style="width: {{ (results.logistic_regression.probability * 100)|round(1) }}%"></div>
+                        </div>
+                        <div class="meter-value">{{ (results.logistic_regression.probability * 100)|round(1) }}%</div>
+                    </div>
+                    <p class="prediction-text lr-prediction">
+                        Prediction: <strong>{{ "PASS" if results.logistic_regression.prediction == 1 else "FAIL" }}</strong>
+                    </p>
+                </div>
+            </div>
+
+            <div class="input-summary">
+                <h3>Input Summary</h3>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="label">Name:</span>
+                        <span class="value">{{ results.input_data.name }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Age:</span>
+                        <span class="value">{{ results.input_data.age }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Study Hours/Week:</span>
+                        <span class="value">{{ results.input_data.study_hours }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Attendance Rate:</span>
+                        <span class="value">{{ (results.input_data.attendance_rate * 100)|round(1) }}%</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Previous Grade:</span>
+                        <span class="value">{{ results.input_data.previous_grade }}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="/" class="btn btn-secondary">Make Another Prediction</a>
+                <button onclick="exportResults()" class="btn btn-primary">Export Results</button>
+            </div>
+        </div>
+    </div>
+
+    <script id="results-json" type="application/json">
+        {{ results | tojson | safe }}
+    </script>
+    <script>
+        function exportResults() {
+            const rawJson = document.getElementById('results-json').textContent;
+            const resultsData = JSON.parse(rawJson);
+            const blob = new Blob([JSON.stringify(resultsData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'prediction_results.json';
+            a.click();
+        }
+    </script>
+</body>
+</html>

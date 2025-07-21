@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prediction Form - EduPredict AI</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+        :root {
+            --primary: #6c7b95;
+            --primary-dark: #5a6b85;
+            --accent: #4a90b8;
+            --secondary: #8b9cb8;
+            --dark: #1e293b;
+            --light: #f5f7fa;
+            --gray: #64748b;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Navigation */
+ nav.navbar {
+  background: linear-gradient(135deg, rgba(245, 247, 250, 0.95), rgba(195, 207, 226, 0.9));
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 16px !important;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+nav.scrolled {
+  padding: 4px 16px !important;
+  height: 60px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, rgba(245, 247, 250, 0.98), rgba(195, 207, 226, 0.95));
+}
+
+.navbar-nav {
+  gap: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 400;
+  font-size: 0.95rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: rgba(30, 41, 59, 0.9);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  line-height: 1.2;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar-nav .nav-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(108, 123, 149, 0.2), rgba(245, 158, 11, 0.2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 8px;
+}
+
+.navbar-nav .nav-link:hover::before {
+  opacity: 1;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(108, 123, 149, 0.3);
+}
+
+.navbar-nav .nav-link.active {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 5px 20px rgba(108, 123, 149, 0.3);
+  color: #1e293b;
+}
+
+.navbar-brand {
+  font-size: 1.05rem !important;
+  padding: 0 !important;
+  margin-right: 0.8rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2830, 41, 59, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Body padding to account for fixed navbar */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-top: 80px; /* Account for fixed navbar */
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .container:hover {
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .main-content {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(108, 123, 149, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 3px rgba(74, 144, 184, 0.15);
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+        
+        .predict-btn {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: center;
+            margin: 30px auto 0;
+            min-width: 240px;
+            box-shadow: 0 8px 20px rgba(74, 144, 184, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .predict-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .predict-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(74, 144, 184, 0.4);
+        }
+        
+        .predict-btn:hover::before {
+            left: 100%;
+        }
+       .form-description {
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c7b95' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+        
+        .required-field::after {
+            content: "*";
+            color: var(--danger);
+            margin-left: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+
+            .navbar-brand {
+                font-size: 1.3rem !important;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 0.95rem;
+                margin: 2px 0;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 30px 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .predict-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding-top: 65px;
+            }
+
+            .navbar {
+                padding: 8px 0;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem !important;
+            }
+
+            .container {
+                margin: 20px 10px;
+            }
+        }
+        
+        /* Enhanced tooltip styling */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: var(--secondary);
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 220px;
+            background: linear-gradient(135deg, var(--dark), var(--primary));
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            font-weight: normal;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--dark) transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+        
+        /* Add subtle animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-group {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .form-group:nth-child(even) {
+            animation-delay: 0.1s;
+        }
+        
+        /* Stats highlight styling for future use */
+        .stats-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 144, 184, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .stats-highlight {
+            background: linear-gradient(135deg, rgba(74, 144, 184, 0.1), rgba(139, 156, 184, 0.1));
+            color: var(--accent);
+            font-weight: 600;
+        }  
+  </style>
+</head>
+<body>
+
+<!-- Fixed and responsive navbar -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container-fluid px-3 px-md-4">
+    <a class="navbar-brand" href="/home">🎓 EduPredict AI</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('home') }}">
+            <i class="fas fa-home"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{{ url_for('index') }}">
+            <i class="fas fa-edit"></i> Prediction Form
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('how_it_works') }}">
+            <i class="fas fa-question-circle"></i> How It Works
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('about') }}">
+            <i class="fas fa-info-circle"></i> About
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('contact') }}">
+            <i class="fas fa-envelope"></i> Contact
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Student Performance Predictor</h1>
+            <p>Advanced analytics to predict and improve academic outcomes using machine learning</p>
+        </div>
+
+        <div class="main-content">
+            <h2 class="section-title"><i class="fas fa-user-graduate"></i> Student Information</h2>
+            <p class="form-description">
+                Please provide accurate information about the student to generate the most reliable prediction. 
+                All fields are required unless marked optional.
+            </p>
+            
+                <form method="POST" action="/predict">
+    <div class="form-grid">
+
+        <!-- Student Name -->
+        <div class="form-group">
+            <label for="name" class="required-field">Student Name</label>
+            <div class="input-wrapper">
+                <input type="text" id="name" name="name" placeholder="Enter full name" required>
+                <i class="fas fa-user input-icon"></i>
+            </div>
+        </div>
+
+        <!-- Age -->
+        <div class="form-group">
+            <label for="age" class="required-field">Age</label>
+            <div class="input-wrapper">
+                <input type="number" id="age" name="age" min="16" max="30" placeholder="Between 16-30 years" required>
+                <i class="fas fa-birthday-cake input-icon"></i>
+            </div>
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group">
+            <label for="gender" class="required-field">Gender</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>Select gender</option>
+                <option value="Male">👨 Male</option>
+                <option value="Female">👩 Female</option>
+                <option value="Other">⚧️ Other/Prefer not to say</option>
+            </select>
+        </div>
+
+        <!-- Parental Education -->
+        <div class="form-group">
+            <label for="parental_education" class="required-field">Highest Parental Education</label>
+            <select id="parental_education" name="parental_education" required>
+                <option value="" disabled selected>Select education level</option>
+                <option value="Elementary">📚 Elementary School</option>
+                <option value="High School">🏫 High School Diploma</option>
+                <option value="Bachelor">🎓 Bachelor's Degree</option>
+                <option value="Master">📝 Master's Degree</option>
+                <option value="PhD">🔬 PhD/Doctorate</option>
+            </select>
+        </div>
+
+        <!-- Family Income -->
+        <div class="form-group">
+            <label for="family_income" class="required-field">Annual Family Income</label>
+            <select id="family_income" name="family_income" required>
+                <option value="" disabled selected>Select income range</option>
+                <option value="Low">💰 Low Income (below ₹1.25 lakhs)</option>
+                <option value="Medium">💵 Middle Income (₹1.25-30 lakhs)</option>
+                <option value="High">💎 High Income (above ₹30 lakhs)</option>
+            </select>
+        </div>
+
+        <!-- Extracurricular -->
+        <div class="form-group">
+            <label for="extracurricular" class="required-field">Extracurricular Participation
+                <span class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltiptext">Includes sports, arts, clubs, or other non-academic activities</span>
+                </span>
+            </label>
+            <select id="extracurricular" name="extracurricular" required>
+                <option value="" disabled selected>Select participation</option>
+                <option value="1">✅ Yes, regularly participates</option>
+                <option value="0">❌ No participation</option>
+            </select>
+        </div>
+
+        <!-- Internet Access -->
+        <div class="form-group">
+            <label for="internet_access" class="required-field">Reliable Internet Access</label>
+            <select id="internet_access" name="internet_access" required>
+                <option value="" disabled selected>Select availability</option>
+                <option value="1">🌐 Yes, consistent access</option>
+                <option value="0">📵 Limited or no access</option>
+            </select>
+        </div>
+
+        <!-- Tutoring -->
+        <div class="form-group">
+            <label for="tutoring" class="required-field">Private Tutoring
+                <span class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltiptext">Paid academic support outside school</span>
+                </span>
+            </label>
+            <select id="tutoring" name="tutoring" required>
+                <option value="" disabled selected>Select option</option>
+                <option value="1">👨‍🏫 Receives tutoring</option>
+                <option value="0">🚫 No tutoring</option>
+            </select>
+        </div>
+
+        <!-- 🔼 New: Study Hours -->
+        <div class="form-group">
+            <label for="study_hours" class="required-field">Weekly Study Hours</label>
+            <div class="input-wrapper">
+                <input type="number" id="study_hours" name="study_hours" min="0" max="100" placeholder="e.g., 10" required>
+                <i class="fas fa-book input-icon"></i>
+            </div>
+        </div>
+
+        <!-- 🔼 New: Attendance Rate -->
+        <div class="form-group">
+            <label for="attendance" class="required-field">Attendance Rate (%)</label>
+            <div class="input-wrapper">
+                <input type="number" id="attendance" name="attendance" min="0" max="100" placeholder="e.g., 85" required>
+                <i class="fas fa-calendar-check input-icon"></i>
+            </div>
+        </div>
+
+        <!-- 🔼 New: Previous Grade -->
+        <div class="form-group">
+            <label for="previous_grade" class="required-field">Previous Grade (%)</label>
+            <div class="input-wrapper">
+                <input type="number" id="previous_grade" name="previous_grade" min="0" max="100" placeholder="e.g., 75" required>
+                <i class="fas fa-graduation-cap input-icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="predict-btn">
+        <i class="fas fa-brain"></i> Generate Performance Prediction
+    </button>
+</form>
+
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enhanced focus effects for better UX
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('focus', function() {
+                const icon = this.parentElement.querySelector('.input-icon');
+                if (icon) {
+                    icon.style.color = 'var(--accent)';
+                    icon.style.transform = 'translateY(-50%) scale(1.1)';
+                }
+            });
+            
+            element.addEventListener('blur', function() {
+                const icon = this.parentElement.querySelector('.input-icon');
+                if (icon) {
+                    icon.style.color = 'var(--secondary)';
+                    icon.style.transform = 'translateY(-50%) scale(1)';
+                }
+            });
+        });
+        
+        // Enhanced form validation with better visual feedback
+        document.querySelector('form').addEventListener('submit', function(e) {
+            let valid = true;
+            document.querySelectorAll('[required]').forEach(field => {
+                if (!field.value) {
+                    field.style.borderColor = 'var(--danger)';
+                    field.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+                    valid = false;
+                } else {
+                    field.style.borderColor = 'rgba(108, 123, 149, 0.2)';
+                    field.style.boxShadow = 'none';
+                }
+            });
+            
+            if (!valid) {
+                e.preventDefault();
+                alert('Please fill in all required fields before submitting.');
+            }
+        });
+        
+        // Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>

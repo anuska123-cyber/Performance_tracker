@@ -1,0 +1,323 @@
+{% extends "layout.html" %}
+{% block title %}Student Details{% endblock %}
+{% block content %}
+<style>
+    .results-container {
+        display: grid;
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+
+    .student-info-card,
+    .results-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--shadow);
+        padding: 2.5rem;
+        transition: all 0.3s ease;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .student-info-card:hover,
+    .results-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 50px rgba(31, 38, 135, 0.4);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .info-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .info-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: scale(1.02);
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.3rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        font-size: 1.25rem; /* increased */
+        font-weight: 600;   /* bold */
+        color: var(--text-dark);
+    }
+
+    .divider {
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+        border: none;
+        border-radius: 2px;
+        margin: 2.5rem 0;
+        opacity: 0.6;
+    }
+
+    .prediction-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.25rem; /* increased */
+        box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        margin-bottom: 1rem;
+    }
+
+    .confidence-meter {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        padding: 0.3rem;
+        margin: 1rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .confidence-fill {
+        height: 12px;
+        background: linear-gradient(90deg, var(--accent-color), #27ae60);
+        border-radius: 20px;
+        transition: width 1s ease-out;
+        position: relative;
+    }
+
+    .confidence-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    .risk-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin: 0.5rem 0;
+    }
+
+    .risk-low {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+    }
+
+    .risk-medium {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        color: white;
+    }
+
+    .risk-high {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+    }
+
+    .recommendations-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 1rem;
+    }
+
+    .recommendations-list li {
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0.8rem 0;
+        padding: 1rem 1.2rem;
+        border-radius: 12px;
+        border-left: 4px solid var(--accent-color);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .recommendations-list li::before {
+        content: '💡';
+        margin-right: 0.8rem;
+        font-size: 1.2rem;
+    }
+
+    .recommendations-list li:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateX(5px);
+        border-left-color: #27ae60;
+    }
+
+    .summary-box {
+        background: linear-gradient(135deg, rgba(74, 144, 184, 0.15), rgba(139, 156, 184, 0.15));
+        border: 1px solid rgba(74, 144, 184, 0.3);
+        padding: 1.8rem;
+        border-radius: 16px;
+        margin-top: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .summary-box::before {
+        content: '💡';
+        font-size: 1.5rem;
+        margin-right: 0.8rem;
+    }
+
+    .summary-text {
+        font-style: italic;
+        font-size: 1.25rem; /* increased */
+        line-height: 1.7;
+        color: var(--text-dark);
+        font-weight: 600;
+    }
+
+    .model-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border-radius: 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .results-container {
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+
+        .student-info-card,
+        .results-card {
+            padding: 1.5rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+
+        .prediction-badge {
+            font-size: 1.1rem;
+            padding: 0.6rem 1.2rem;
+        }
+    }
+
+
+</style>
+<div class="results-container">
+    <!-- Student Information Card -->
+    <div class="student-info-card">
+        <h2>🧾 Student Information</h2>
+        <div class="info-grid">
+            <div class="info-item"><div class="info-label">Name</div><div class="info-value">{{ student['name'] }}</div></div>
+            <div class="info-item"><div class="info-label">Age</div><div class="info-value">{{ student['age'] }} years</div></div>
+            <div class="info-item"><div class="info-label">Gender</div><div class="info-value">{{ student['gender'] }}</div></div>
+            <div class="info-item"><div class="info-label">Parental Education</div><div class="info-value">{{ student['parental_education'] }}</div></div>
+            <div class="info-item"><div class="info-label">Study Hours</div><div class="info-value">{{ student['study_hours'] }} hrs/week</div></div>
+            <div class="info-item"><div class="info-label">Attendance Rate</div><div class="info-value">{{ "%.1f"|format(student['attendance_rate'] * 100) }}%</div></div>
+            <div class="info-item"><div class="info-label">Previous Grade</div><div class="info-value">{{ student['previous_grade'] }}</div></div>
+            <div class="info-item"><div class="info-label">Family Income</div><div class="info-value">{{ student['family_income'] }}</div></div>
+            <div class="info-item"><div class="info-label">Internet Access</div><div class="info-value">{{ '✅ Yes' if student['internet_access'] else '❌ No' }}</div></div>
+            <div class="info-item"><div class="info-label">Tutoring</div><div class="info-value">{{ '✅ Yes' if student['tutoring'] else '❌ No' }}</div></div>
+            <div class="info-item"><div class="info-label">Extracurricular</div><div class="info-value">{{ '✅ Yes' if student['extracurricular'] else '❌ No' }}</div></div>
+        </div>
+    </div>
+
+    <!-- Results Card -->
+    <div class="results-card">
+        <h2>🎯 Prediction Results</h2>
+        
+        <div class="prediction-badge">
+            <span>🎯</span>
+            <span>{{ result['prediction'] }}</span>
+        </div>
+        
+        <div>
+            <strong>Confidence Level:</strong>
+            <div class="confidence-meter">
+                <div class="confidence-fill" style="width: {{ result['confidence'].split('%')[0] }}%;"></div>
+            </div>
+            <span style="font-weight: 700; font-size: 1.25rem; color: var(--accent-color);">{{ result['confidence'] }}</span>
+
+        </div>
+        
+        <div style="margin: 1.5rem 0;">
+            <strong>Risk Assessment:</strong>
+            <div class="risk-indicator risk-{{ result['risk_level'].lower() }}">
+                <span>⚠️</span>
+                <span>{{ result['risk_level'] }} Risk</span>
+            </div>
+        </div>
+        
+        <div class="model-badge">
+            <span>🤖</span>
+            <span>Model: {{ result['model'] }}</span>
+        </div>
+        
+        <hr class="divider">
+
+        <h3>📌 Personalized Recommendations</h3>
+          <ul class="recommendations-list">
+              {% for tip in result['recommendations'] %}
+                  <li>{{ tip }}</li>
+              {% endfor %}
+          </ul>
+
+        <div class="summary-box" style="font-size:1.5rem;">
+            <div class="summary-text">{{ result['summary'] }}</div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const confidenceFill = document.querySelector('.confidence-fill');
+        if (confidenceFill) {
+            confidenceFill.style.width = '0%';
+            setTimeout(() => {
+                confidenceFill.style.width = "{{ result['confidence'].split('%')[0] }}%";
+            }, 500);
+        }
+    });
+</script>
+{% endblock %}

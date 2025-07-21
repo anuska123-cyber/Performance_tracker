@@ -1,0 +1,23 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: http://127.0.0.1:5000/login
+Subject: 404 Not Found
+Date: Tue, 1 Jul 2025 10:44:43 +0530
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--TFNAdcMFE6CvimzZGQh4mSbkj3OsD6hpL7c3KlBc59----"
+
+
+------MultipartBoundary--TFNAdcMFE6CvimzZGQh4mSbkj3OsD6hpL7c3KlBc59----
+Content-Type: text/html
+Content-ID: <frame-D3D2BD6B1F2E1BE2444EED0E2E5EA461@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://127.0.0.1:5000/login
+
+<!DOCTYPE html><html lang=3D"en"><head><meta http-equiv=3D"Content-Type" co=
+ntent=3D"text/html; charset=3DUTF-8"><title>404 Not Found</title>
+</head><body><h1>Not Found</h1>
+<p>The requested URL was not found on the server. If you entered the URL ma=
+nually please check your spelling and try again.</p>
+</body></html>
+------MultipartBoundary--TFNAdcMFE6CvimzZGQh4mSbkj3OsD6hpL7c3KlBc59------

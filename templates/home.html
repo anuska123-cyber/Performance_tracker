@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Performance Predictor - AI-Powered Education Analytics</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #f59e0b;
+      --accent-color: #10b981;
+      --dark-color: #1e293b;
+      --light-color: #f8fafc;
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      line-height: 1.6;
+      color: var(--dark-color);
+      overflow-x: hidden;
+    }
+
+    /* Animated Background Particles */
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(37, 99, 235, 0.3);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.5; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+    }
+
+/* Navigation */
+nav {
+  background: linear-gradient(135deg, rgba(245, 247, 250, 0.95) 0%, rgba(195, 207, 226, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  padding: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+nav.scrolled {
+  padding: 12px 18px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, rgba(245, 247, 250, 0.98) 0%, rgba(195, 207, 226, 0.95) 100%);
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  color: rgba(30, 41, 59, 0.9);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 10px 16px;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+nav ul li a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(108, 123, 149, 0.2), rgba(245, 158, 11, 0.2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+nav ul li a:hover::before {
+  opacity: 1;
+}
+
+nav ul li a:hover {
+  color: var(--dark-color);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(108, 123, 149, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 5px 20px rgba(108, 123, 149, 0.3);
+  color: var(--dark-color);
+}
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(37,99,235,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      color: #64748b;
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    .hero .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-enhanced {
+      padding: 1rem 2.5rem;
+      font-weight: 600;
+      border-radius: 50px;
+      border: none;
+      font-size: clamp(1rem, 3vw, 1.1rem);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary-enhanced {
+      background: var(--gradient-primary);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary-enhanced:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      color: white;
+    }
+
+    .btn-secondary-enhanced {
+      background: white;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary-enhanced:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 5rem 0;
+      background: white;
+      position: relative;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.4s ease;
+      border: 1px solid #f1f5f9;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+      transform: translateX(0);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1);
+    }
+
+    .feature-card h3 {
+      font-size: clamp(1.2rem, 4vw, 1.4rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+    }
+
+    .feature-card p {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: clamp(0.9rem, 3vw, 1rem);
+    }
+
+    /* Stats Section */
+    .stats-section {
+      padding: 5rem 0;
+      background: var(--gradient-primary);
+      color: white;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-number {
+      font-size: clamp(2rem, 8vw, 3rem);
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: clamp(1rem, 3vw, 1.1rem);
+      opacity: 0.9;
+    }
+
+    /* Why Choose Section */
+    .why-choose-section {
+      padding: 5rem 0;
+      background: #f8fafc;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+
+    .benefit-item:hover {
+      transform: translateX(10px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .benefit-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--gradient-accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    /* Data Insights Section */
+    .data-insights-section {
+      padding: 5rem 0;
+      background: white;
+    }
+
+    .insight-card {
+      text-align: center;
+      padding: 2.5rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #f1f5f9;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .insight-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .insight-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 1.5rem;
+      background: var(--gradient-secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: white;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-color);
+      color: white;
+      padding: 3rem 0 1rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    /* Scroll Progress Bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+      z-index: 999;
+      transition: width 0.1s ease;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      nav {
+        padding: 12px;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      nav ul li a {
+        padding: 8px 12px;
+        font-size: 1rem;
+      }
+      
+      .hero {
+        padding-top: 100px;
+        min-height: 90vh;
+      }
+      
+      .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      
+      .hero .subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .hero .cta-buttons {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn-enhanced {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      
+      .feature-card {
+        padding: 2rem;
+      }
+      
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+      
+      .stat-card {
+        padding: 1.5rem;
+      }
+      
+      .benefit-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+      }
+      
+      .benefit-item:hover {
+        transform: translateY(-5px);
+      }
+      
+      .insight-card {
+        padding: 2rem;
+      }
+      
+      .insight-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+      
+      .footer-links {
+        gap: 1rem;
+        flex-direction: column;
+      }
+      
+      .features-section,
+      .stats-section,
+      .why-choose-section,
+      .data-insights-section {
+        padding: 3rem 0;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        padding: 0 15px;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .hero .subtitle {
+        font-size: 1rem;
+      }
+      
+      .feature-card,
+      .stat-card,
+      .insight-card {
+        padding: 1.5rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .benefit-item {
+        margin-bottom: 1rem;
+      }
+      
+      .footer-content p {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav {
+        padding: 10px;
+      }
+      
+      nav ul {
+        gap: 10px;
+      }
+      
+      nav ul li a {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+      }
+      
+      .hero {
+        padding-top: 120px;
+      }
+      
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .btn-enhanced {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+      }
+      
+      .particle {
+        width: 2px;
+        height: 2px;
+      }
+    }
+
+    /* Tablet Responsive */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+      
+      .hero .subtitle {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Large screens */
+    @media (min-width: 1400px) {
+      .container {
+        max-width: 1320px;
+      }
+      
+      .hero h1 {
+        font-size: 4.5rem;
+      }
+      
+      .hero .subtitle {
+        font-size: 1.3rem;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* High DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .particle {
+        width: 3px;
+        height: 3px;
+      }
+    }
+
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .particle {
+        animation: none;
+      }
+    }
+
+    /* Print styles */
+    @media print {
+      .bg-particles,
+      .scroll-progress,
+      nav,
+      footer {
+        display: none;
+      }
+      
+      .hero {
+        min-height: auto;
+        padding: 2rem 0;
+      }
+      
+      * {
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Particles -->
+  <div class="bg-particles"></div>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress"></div>
+
+  <!--navbar-->
+  <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a class="navbar-brand" href="#home" style="font-size: larger;">🎓 EduPredict AI</a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-edit"></i> Prediction Form</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('how_it_works') }}"><i class="fas fa-question-circle"></i> How It Works</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('contact') }}"><i class="fas fa-envelope"></i> Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 hero-content text-center text-lg-start">
+          <h1 class="animate-on-scroll">AI-Powered Student Success Prediction</h1>
+          <p class="subtitle animate-on-scroll">Transform education with intelligent analytics. Predict student outcomes, identify at-risk learners, and enable data-driven interventions for better academic success.</p>
+          <div class="cta-buttons animate-on-scroll">
+            <a href="#features" class="btn-enhanced btn-primary-enhanced" onclick="startPrediction()">
+              <i class="fas fa-rocket me-2"></i>Start Prediction
+            </a>
+            <a href="#features" class="btn-enhanced btn-secondary-enhanced">
+              <i class="fas fa-info-circle me-2"></i>Learn More
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center">
+          <div class="hero-visual animate-on-scroll">
+            <div style="font-size: clamp(8rem, 20vw, 12rem); opacity: 0.1;">🎯</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="animate-on-scroll" style="font-size: clamp(2rem, 6vw, 2.5rem); font-weight: 800; margin-bottom: 1rem;">Powerful Features</h2>
+        <p class="animate-on-scroll" style="font-size: clamp(1rem, 3vw, 1.2rem); color: #64748b; max-width: 600px; margin: 0 auto;">Advanced AI technology meets educational insights to create the most comprehensive student prediction platform.</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h3>Advanced AI Analytics</h3>
+          <p>Cutting-edge machine learning algorithms analyze multiple data points to provide highly accurate predictions with 95%+ accuracy rate.</p>
+        </div>
+        
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3>Real-Time Processing</h3>
+          <p>Get instant predictions and insights with our lightning-fast processing engine. No waiting, just immediate actionable results.</p>
+        </div>
+        
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Comprehensive Insights</h3>
+          <p>Deep analysis of academic performance, behavioral patterns, and social factors to provide holistic student assessments.</p>
+        </div>
+        
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Privacy Protected</h3>
+          <p>Enterprise-grade security ensures student data remains confidential and complies with all educational privacy regulations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section id="stats" class="stats-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="animate-on-scroll" style="font-size: clamp(2rem, 6vw, 2.5rem); font-weight: 800; margin-bottom: 1rem;">Proven Results</h2>
+        <p class="animate-on-scroll" style="font-size: clamp(1rem, 3vw, 1.2rem); opacity: 0.9; max-width: 600px; margin: 0 auto;">Our platform has helped thousands of educational institutions improve student outcomes through data-driven insights.</p>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card animate-on-scroll">
+          <span class="stat-number" data-target="95">0</span>
+          <div class="stat-label">Accuracy Rate</div>
+        </div>
+        
+        <div class="stat-card animate-on-scroll">
+          <span class="stat-number" data-target="50000">0</span>
+          <div class="stat-label">Students Analyzed</div>
+        </div>
+        
+        <div class="stat-card animate-on-scroll">
+          <span class="stat-number" data-target="500">0</span>
+          <div class="stat-label">Institutions Served</div>
+        </div>
+        
+        <div class="stat-card animate-on-scroll">
+          <span class="stat-number" data-target="24">0</span>
+          <div class="stat-label">Hours Available</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Section -->
+  <section id="about" class="why-choose-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2 class="animate-on-scroll" style="font-size: clamp(2rem, 6vw, 2.5rem); font-weight: 800; margin-bottom: 2rem;">Why Choose EduPredict AI?</h2>
+          <p class="animate-on-scroll" style="font-size: clamp(1rem, 3vw, 1.1rem); color: #64748b; margin-bottom: 2rem;">Our platform combines cutting-edge technology with educational expertise to deliver unparalleled insights into student performance and success patterns.</p>
+          
+          <div class="benefit-item animate-on-scroll">
+            <div class="benefit-icon">
+              <i class="fas fa-target"></i>
+            </div>
+            <div>
+              <h5>Early Risk Detection</h5>
+              <p class="mb-0">Identify at-risk students before problems escalate, enabling timely interventions.</p>
+            </div>
+                      </div>
+          
+          <div class="benefit-item animate-on-scroll">
+            <div class="benefit-icon">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <div>
+              <h5>Comprehensive Analytics</h5>
+              <p class="mb-0">Track multiple performance indicators with intuitive visualizations and reports.</p>
+            </div>
+          </div>
+          
+          <div class="benefit-item animate-on-scroll">
+            <div class="benefit-icon">
+              <i class="fas fa-user-graduate"></i>
+            </div>
+            <div>
+              <h5>Personalized Learning</h5>
+              <p class="mb-0">Tailor educational approaches based on individual student needs and patterns.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6 text-center">
+          <div class="animate-on-scroll" style="background: var(--gradient-primary); border-radius: 20px; padding: 2rem; box-shadow: var(--shadow-lg);">
+            <img src="https://edicomgroup.com/.imaging/default/website/en_en/blog/types-dashboards-examples-kpis/image"alt="Dashboard Preview" class="img-fluid rounded" style="border: 5px solid white;">
+            <p class="mt-3" style="color: white;">Our intuitive dashboard provides actionable insights at a glance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Insights Section -->
+  <section id="insights" class="data-insights-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="animate-on-scroll" style="font-size: clamp(2rem, 6vw, 2.5rem); font-weight: 800; margin-bottom: 1rem;">Data-Driven Insights</h2>
+        <p class="animate-on-scroll" style="font-size: clamp(1rem, 3vw, 1.2rem); color: #64748b; max-width: 600px; margin: 0 auto;">Transform raw data into meaningful educational strategies with our comprehensive analytics.</p>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="insight-card animate-on-scroll">
+            <div class="insight-icon">
+              <i class="fas fa-project-diagram"></i>
+            </div>
+            <h4>Pattern Recognition</h4>
+            <p>Our AI identifies hidden patterns in student performance that human analysis might miss.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="insight-card animate-on-scroll">
+            <div class="insight-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <h4>Automated Alerts</h4>
+            <p>Receive notifications when students show signs of academic difficulty or exceptional performance.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="insight-card animate-on-scroll">
+            <div class="insight-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <h4>Actionable Recommendations</h4>
+            <p>Get specific suggestions for interventions based on each student's unique situation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Section -->
+  <section id="cta" class="py-5" style="background: var(--gradient-secondary); color: white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-8 text-center text-lg-start">
+          <h2 class="mb-3 animate-on-scroll" style="font-size: clamp(1.5rem, 5vw, 2rem);">Ready to Transform Your Educational Outcomes?</h2>
+          <p class="mb-lg-0 animate-on-scroll">Join hundreds of institutions already benefiting from our AI-powered predictive analytics.</p>
+        </div>
+        <div class="col-lg-4 text-center text-lg-end">
+          <a href="#features" class="btn-enhanced btn-primary-enhanced animate-on-scroll" style="background: white; color: var(--dark-color);">
+            <i class="fas fa-play me-2"></i>Get Started Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-5 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h2 class="animate-on-scroll" style="font-size: clamp(1.8rem, 5vw, 2.2rem); font-weight: 800; margin-bottom: 1.5rem;">Contact Us</h2>
+          <p class="animate-on-scroll mb-5" style="font-size: 1.1rem; color: #64748b;">Have questions or want to learn more? Our team is here to help.</p>
+          
+          <div class="row g-4">
+            <div class="col-md-4 animate-on-scroll">
+              <div class="p-3 bg-white rounded shadow-sm">
+                <i class="fas fa-envelope fa-2x mb-3" style="color: var(--primary-color);"></i>
+                <h5>Email Us</h5>
+                <p class="mb-0">info@edupredict.ai</p>
+              </div>
+            </div>
+            
+            <div class="col-md-4 animate-on-scroll">
+              <div class="p-3 bg-white rounded shadow-sm">
+                <i class="fas fa-phone fa-2x mb-3" style="color: var(--primary-color);"></i>
+                <h5>Call Us</h5>
+                <p class="mb-0">+1 (555) 123-4567</p>
+              </div>
+            </div>
+            
+            <div class="col-md-4 animate-on-scroll">
+              <div class="p-3 bg-white rounded shadow-sm">
+                <i class="fas fa-map-marker-alt fa-2x mb-3" style="color: var(--primary-color);"></i>
+                <h5>Visit Us</h5>
+                <p class="mb-0">123 Edu Street, Boston, MA</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="mb-4">
+        <h3 class="mb-3" style="font-weight: 700;">🎓 EduPredict AI</h3>
+        <p style="max-width: 600px; margin: 0 auto; opacity: 0.8;">Empowering educators with AI-driven insights to improve student success and institutional effectiveness.</p>
+      </div>
+      
+      <div class="footer-links mb-4">
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#stats">Results</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      
+      <div class="social-links mb-4">
+        <a href="#" class="mx-2" style="color: white; font-size: 1.2rem;"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="mx-2" style="color: white; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="mx-2" style="color: white; font-size: 1.2rem;"><i class="fab fa-linkedin"></i></a>
+        <a href="#" class="mx-2" style="color: white; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+      </div>
+      
+      <p style="opacity: 0.7; font-size: 0.9rem;">&copy; 2023 EduPredict AI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Create background particles
+    function createParticles() {
+      const particlesContainer = document.querySelector('.bg-particles');
+      const particleCount = window.innerWidth < 768 ? 30 : 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random position
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        
+        // Random size
+        const size = Math.random() * 3 + 2;
+        
+        // Random animation duration
+        const duration = Math.random() * 10 + 5;
+        
+        // Random delay
+        const delay = Math.random() * 5;
+        
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // Scroll progress indicator
+    function updateScrollProgress() {
+      const scrollProgress = document.querySelector('.scroll-progress');
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercentage = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = `${scrollPercentage}%`;
+    }
+    
+    // Animate stats counters
+    function animateCounters() {
+      const statNumbers = document.querySelectorAll('.stat-number');
+      const speed = 200;
+      
+      statNumbers.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-target'));
+        const increment = target / speed;
+        let current = 0;
+        
+        const timer = setInterval(() => {
+          current += increment;
+          stat.textContent = Math.floor(current);
+          
+          if (current >= target) {
+            stat.textContent = target;
+            clearInterval(timer);
+          }
+        }, 1);
+      });
+    }
+    
+    // Animate on scroll
+    function animateOnScroll() {
+      const elements = document.querySelectorAll('.animate-on-scroll');
+      
+      elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.2;
+        
+        if (elementPosition < screenPosition) {
+          element.classList.add('animated');
+        }
+      });
+    }
+    
+    // Navbar scroll effect
+    function handleNavbarScroll() {
+      const navbar = document.getElementById('navbar');
+      const scrollPosition = window.scrollY;
+      
+      if (scrollPosition > 100) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }
+    
+    // Smooth scrolling for anchor links
+    function setupSmoothScrolling() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    }
+    
+    // Start prediction form
+    function startPrediction() {
+      // In a real implementation, this would show the prediction form
+      alert('Prediction form will be displayed here. This is a demo.');
+    }
+    
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      createParticles();
+      setupSmoothScrolling();
+      
+      // Initialize animations
+      setTimeout(() => {
+        document.querySelector('.hero h1').classList.add('animated');
+        document.querySelector('.hero .subtitle').classList.add('animated');
+        document.querySelector('.hero .cta-buttons').classList.add('animated');
+      }, 300);
+    });
+    
+    // Event listeners
+    window.addEventListener('scroll', function() {
+      updateScrollProgress();
+      animateOnScroll();
+      handleNavbarScroll();
+    });
+    
+    // Intersection Observer for stats animation
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    document.querySelectorAll('.stats-section').forEach(section => {
+      statsObserver.observe(section);
+    });
+  </script>
+</body>
+</html>
